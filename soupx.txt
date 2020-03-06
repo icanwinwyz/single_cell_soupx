@@ -1,0 +1,201 @@
+library(SoupX)
+history()
+data<-Read10X("../../27_results/outs/raw_feature_bc_matrix/")
+library(Seurat)
+data<-Read10X("../../27_results/outs/raw_feature_bc_matrix/")
+dim(data)
+?SoupChannel
+#SoupChannel(keepDroplets = FALSE)
+?SoupChannel
+norm<-read.delim("./27_Expr_raw_QC.csv",header=T,sep="\t")
+dim(norm)
+colnames(norm)
+norm<-read.delim("./27_Expr_raw_QC.csv",header=T,sep="\t",row.names=1,check.names=F)
+colnames(norm)
+dim(norm)
+norm<-read.csv("./27_Expr_raw_QC.csv",header=T,row.names=1,check.names=F)
+dim(norm)
+#sc<-SoupChannel(tod=data,toc=norm,metaData=)
+metadata<-read.delim("../sample27_cell_popu.txt",sep="\t",header=T)
+head(metadata)
+ls
+colnames(toc)
+ls()
+colnames(norm)
+sub("-1","",metadata[,1])
+metadata[,1]<-sub("-1","",metadata[,1])
+head(metadata)
+metadata<-read.delim("../sample27_cell_popu.txt",sep="\t",header=T,row.names=1)
+head(metadata)
+rownames(metadata)<-sub("-1","",rownames(metadata))
+head(metadata)
+sc<-SoupChannel(tod=data,toc=norm,metaData=metadata,keepDroplets=TRUE)
+sc
+sc$soupProfile
+head(sc$soupProfile)
+marker<-read.delim("../marker_correction.txt")
+head(marker)
+head(sc$soupProfile[order(sc$soupProfile$est, decreasing = TRUE), ], n = 20)
+plotMarkerDistribution(sc)
+sc$metaData
+coor<-read.csv("../sample27_projection.csv")
+head(coor)
+coor<-read.csv("../sample27_projection.csv",row.names=1)
+head(coor)
+rownames(coor)<-sub("-1","",rownames(coor))
+head(coor)
+data(PBMC_DR)
+head(PBMC_DR)
+sc=setDR(sc,coor)
+sc$DR
+colnames(coor)<-c("RD1","RD2")
+head(coor)
+sc=setDR(sc,coor)
+sc$DR
+setDR
+?setDR
+head(sc$metaData)
+plotMarkerDistribution(sc)
+pdf("Marker_Distribution.pdf")
+plotMarkerDistribution(sc)
+dev.off()
+redcell=c("Hbb-bs","Hbb-bt","Hba-a1","Hba-a2")
+whitecell=c("C1qa")
+useToEst = estimateNonExpressingCells(sc, nonExpressedGeneList = list(blood=redcell))
+sc$metaData
+head(sc$metaData)
+head(PBMC_DR)
+colnames(sc)
+colnames(sc$metaData)
+colnames(sc$metaData)[2]
+colnames(sc$metaData)[2]<-"Cluster"
+useToEst = estimateNonExpressingCells(sc, nonExpressedGeneList = list(blood=redcell))
+?useToEst
+?estimateNonExpressingCells
+colnames(sc$metaData)[2]<-"cluster"
+?estimateNonExpressingCells
+colnames(sc$metaData)[2]<-"clusters"
+useToEst = estimateNonExpressingCells(sc, nonExpressedGeneList = list(blood=redcell))
+useToEst
+pdf("genes_used_correction.pdf")
+plotMarkerMap(sc, geneSet = redcell, DR = coor, useToEst = useToEst)
+dev.off()
+redcell
+#useToEst = estimateNonExpressingCells(sc, nonExpressedGeneList = list(blood=redcell))
+sc = calculateContaminationFraction(sc, list(blood = redcell), useToEst = useToEst)
+head(sc$metaData)
+sc$metaData
+out = adjustCounts(sc)
+#out = adjustCounts(sc,clusters=setNames())
+
+ls()
+head(metadata)
+out = adjustCounts(sc, clusters = setNames(metadata$new, rownames(metadata)))
+uniq(metadata[,1])
+metadata[,1]
+levels(metadata[,1])
+sub("Connective_tissue",1,metadata[,1])
+metadata
+head(metadata)
+metadata$Cluster<-"NA"
+head(metadata)
+metadata[,"Somatotrope_cells"]
+metadata$new["Somatotrope_cells"]
+metadata$new
+grep("Somatotrope_cells",metadata$new)
+metadata[,2][grep("Somatotrope_cells",metadata$new)]
+metadata[,2][grep("Somatotrope_cells",metadata$new)]<-1
+metadata$new
+levels(metadata$new)
+metadata[,2][grep("Connective_tissue",metadata$new)]<-2
+metadata[,2][grep("Corticotroph_cells",metadata$new)]<-3
+metadata[,2][grep("Corticotroph_cells_doubt",metadata$new)]<-4
+metadata[,2][grep("Endothelial_cells",metadata$new)]<-5
+metadata[,2][grep("Gonadotroph_cells",metadata$new)]<-6
+metadata[,2][grep("Lactotroph_cells",metadata$new)]<-7
+metadata[,2][grep("Melanotroph_cells",metadata$new)]<-8
+metadata[,2][grep("Melanotroph_cells",metadata$new)]<-9
+metadata[,2][grep("Pituitary_stemm_cells",metadata$new)]<-9
+metadata[,2][grep("Red_blood_cells",metadata$new)]<-10
+metadata[,2][grep("Melanotroph_cells",metadata$new)]<-8
+metadata[,2][grep("Pituitary_stemm_cells",metadata$new)]<-9
+metadata[,2][grep("Thyrotroph_cells",metadata$new)]<-11
+metadata[,2][grep("unassigned",metadata$new)]<-12
+metadata[,2][grep("White_blood_cells",metadata$new)]<-13
+head(metadata)
+levels(metadata$Cluster)
+out = adjustCounts(sc, clusters = setNames(metadata$Cluster, rownames(metadata)))
+setNames(metadata$Cluster, rownames(metadata))
+as.matrix(setNames(metadata$Cluster, rownames(metadata)))
+head(as.matrix(setNames(metadata$Cluster, rownames(metadata))))
+str(head(as.matrix(setNames(metadata$Cluster, rownames(metadata)))))
+str(metadata)
+as.numeric(metadata$Cluster)
+metadata$Cluster<-as.numeric(metadata$Cluster)
+str(metdata)
+str(metadata)
+head(as.matrix(setNames(metadata$Cluster, rownames(metadata))))
+out = adjustCounts(sc, clusters = setNames(metadata$Cluster, rownames(metadata)))
+metadata$Cluster
+?adjustCounts
+as.matrix(rownames(metadata),metadata$Cluster)
+data.frame(row.names=rownames(metadata),Cluster=metadata$Cluster)
+haha<-data.frame(row.names=rownames(metadata),Cluster=metadata$Cluster)
+head(jaja)
+head(haha)
+haha<-as.matrix(haha)
+head(haha)
+out = adjustCounts(sc, clusters = haha)
+setNames(haha$Cluster,rownames(haha))
+setNames(metadata$Cluster,rownames(metadata))
+out = adjustCounts(sc, clusters = setNames(metadata$Cluster,rownames(metadata)))
+?adjustCounts
+PBMC_DR
+setNames(PBMC_DR$Cluster, rownames(PBMC_DR)
+)
+metadata$Cluster
+as.factor(metadata$Cluster)
+metadata$Cluster<-as.factor(metadata$Cluster)
+out = adjustCounts(sc, clusters = setNames(metadata$Cluster,rownames(metadata)))
+setNames(PBM$Cluster, rownames(PBMC_DR)
+)
+head(setNames(PBMC_DR$Cluster, rownames(PBMC_DR)))
+str(PBMC_DR)
+str(metadata)
+sc
+setNames(metadata$Cluster, rownames(metadata))
+head(setNames(PBMC_DR$Cluster, rownames(PBMC_DR)))
+test = adjustCounts(sc, clusters = setNames(PBMC_DR$Cluster, rownames(PBMC_DR)))
+test = adjustCounts(sc)
+sc$metaData
+
+temp<-sc$metaData
+sc$clusters<-metadata$Cluster
+head(sc$metaData)
+sc$metaData$clusters<-metadata$Cluster
+test = adjustCounts(sc)
+sc$metaData[,2]
+sc$metaData<-sc$metaData[,-2]
+head(sc$metaData)
+test = adjustCounts(sc)
+head(sc$toc)
+str(sc$toc)
+head(str(sc$toc))
+sc$toc
+sc$toc<-as.matrix(sc$toc)
+test = adjustCounts(sc)
+#out = adjustCounts(sc, clusters = setNames(metadata$Cluster, rownames(metadata)))
+head(metadata)
+out = adjustCounts(sc, clusters = setNames(metadata$Cluster, rownames(metadata)))
+pdf("after_correction.pdf")
+plotChangeMap(sc, out, "Gh")
+plotChangeMap(sc, out, "Hbb-bs")
+plotChangeMap(sc, out, "Pomc")
+plotChangeMap(sc, out, "Hbb-bt")
+plotChangeMap(sc, out, "Prl")
+dev.off()
+history()
+?history()
+?history(max.show = 100)
+history(max.show = 100)
+history(max.show = 500)
